@@ -20,7 +20,7 @@ Your application will then use the following webservice details to activate the 
 
 **Request Method:** POST
 
-**Request Header (key/value pair):**
+**Request Headers (key/value pair):**
 
 &nbsp;&nbsp; **Authkey:** A123JDKn12l123@11saazdeop102
 
