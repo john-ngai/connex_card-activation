@@ -29,6 +29,7 @@ Your application will then use the following webservice details to activate the 
 ## Dependencies
 
 * React
+* http-proxy-middleware
 * Axios
 * Sass
 
