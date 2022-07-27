@@ -5,15 +5,18 @@ import axios from 'axios';
 import './Form.scss';
 
 export default function Form() {
-  // POST request body.
-  const [body, setBody] = useState({
+  const [formData, setFormData] = useState({
     cardnumber: '',
     csv: '',
     expirydata: '',
     phonenumber: '',
   });
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState({
+    state: 'null',
+    message: '',
+  });
 
+  // Submit the formData & update the status.
   const onSubmitHandler = event => {
     event.preventDefault();
     const url = '/cardactivation';
@@ -23,17 +26,33 @@ export default function Form() {
         'Content-Type': 'application/json',
       }
     };
-
-    axios.post(url, body, headers)
-      .then(response => setStatus(response.data.msg))
-      .catch(error => setStatus(error.response.data.msg));
+    axios.post(url, formData, headers)
+      .then(response => {
+        if (response.data.responsecode === 100) {
+          setStatus({
+            state: 'true',
+            message: 'Activation Successful!',
+          });
+        }
+      })
+      .catch(error => {
+        if (error.response.data.responsecode === 101) {
+          setStatus({
+            state: 'false',
+            message: 'Activation Failed. Please check your credentials and try again.',
+          });
+        }
+      });
   }
 
   return (
     <section className='container Form'>
-      <h3>Credit Card Activation</h3>
-      <p>Please enter your credit card details in the form below:</p>
-      <p>{status}</p>
+      <div className='text-zone'>
+        <span className='company'>Bank of Connex</span>
+        <h3 className='title'>Credit Card Activation</h3>
+        <p className='description'>Please enter your credit card details into the form below:</p>
+        <p className='status' data-status={status.state}>{status.message}</p>
+      </div>
       <form onSubmit={onSubmitHandler}>
         <ul>
           <li>
@@ -41,33 +60,33 @@ export default function Form() {
               required
               type='text'
               name='cardnumber'
-              placeholder='card number'
-              value={body.cardnumber}
-              onChange={event => setBody(prev => (
+              placeholder='Card Number'
+              value={formData.cardnumber}
+              onChange={event => setFormData(prev => (
                 { ...prev, cardnumber: event.target.value }
               ))}
             />
           </li>
           <li>
-            <input
+            <input className='half'
               required
               type='text'
               name='csv'
-              placeholder='csv'
-              value={body.csv}
-              onChange={event => setBody(prev => (
+              placeholder='CSV'
+              value={formData.csv}
+              onChange={event => setFormData(prev => (
                 { ...prev, csv: event.target.value }
               ))}
             />
           </li>
           <li>
-            <input
+            <input className='half'
               required
               type='text'
               name='expirydata'
-              placeholder='expiry date (MMYY)'
-              value={body.expirydata}
-              onChange={event => setBody(prev => (
+              placeholder='MM/YY'
+              value={formData.expirydata}
+              onChange={event => setFormData(prev => (
                 { ...prev, expirydata: event.target.value }
               ))}
             />
@@ -77,17 +96,21 @@ export default function Form() {
               required
               type='text'
               name='phonenumber'
-              placeholder='phone number'
-              value={body.phonenumber}
-              onChange={event => setBody(prev => (
+              placeholder='Phone'
+              value={formData.phonenumber}
+              onChange={event => setFormData(prev => (
                 { ...prev, phonenumber: event.target.value }
               ))}
             />
           </li>
-          <li><input className='submit-button' type='submit' value='Submit' /></li>
+          <li>
+            <input className='submit-button'
+              type='submit'
+              value='Submit'
+            />
+          </li>
         </ul>
       </form>
     </section>
-
   );
 }
