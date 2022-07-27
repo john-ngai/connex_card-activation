@@ -11,10 +11,11 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-
+  
   .text-zone {
     text-align: center;
     margin-top: 100px;
+    user-select: none;
 
     .company {
       font-size: 50px;
