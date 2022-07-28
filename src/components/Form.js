@@ -11,6 +11,7 @@ export default function Form() {
     expirydata: '',
     phonenumber: '',
   });
+  // Credit card activation status (state = null, true, or false).
   const [status, setStatus] = useState({
     state: 'null',
     message: '',
@@ -28,6 +29,7 @@ export default function Form() {
     };
     axios.post(url, formData, headers)
       .then(response => {
+        // Success response code = 100.
         if (response.data.responsecode === 100) {
           setStatus({
             state: 'true',
@@ -36,6 +38,7 @@ export default function Form() {
         }
       })
       .catch(error => {
+        // Failed response code = 101.
         if (error.response.data.responsecode === 101) {
           setStatus({
             state: 'false',
